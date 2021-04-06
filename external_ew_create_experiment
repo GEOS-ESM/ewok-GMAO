@@ -1,0 +1,55 @@
+#!/discover/nobackup/asewnath/JediEwok/opt/ewok-env/bin/python
+
+import sys
+import os
+import shutil
+from solo.logger import Logger
+from ewok.configuration import Configuration
+from ewok.workflows.workflow import Workflow
+from suites import suite_factory
+from ewok import ewok_directory
+from ewok.hosts.get_host import GetHost
+
+
+logger = Logger('new_experiment')
+
+
+if len(sys.argv) < 2:
+    print('requires a yaml configuration file')
+    exit(1)
+
+ewok_path = os.environ.get('EWOK_PATH')
+if ewok_path is None:
+    structure = GetHost.get_machine_info()
+    ewok_path = structure['ewok_experiments']
+    os.environ['EWOK_PATH'] = ewok_path
+os.makedirs(ewok_path, exist_ok=True)
+
+logger.info('loading configuration')
+config = Configuration(sys.argv[1], 'suite')
+
+try:
+    # save the configuration file
+    os.makedirs(config['workflow_dir'], exist_ok=True)
+    config.save(target_dir=config['workflow_dir'],
+                target_name=f'{config.experiment}.yaml')
+    logger.info(f'suites found: {", ".join(sorted(suite_factory.registered()))}')
+    if not suite_factory.is_registered(config.suite_class):
+        print(f'Class {config.suite_class} is not known in the suites module')
+        exit(1)
+    logger.info(f'using suite {config.suite_class}')
+    suite = suite_factory.create(config.suite_class)
+    workflow = Workflow(suite.build(), config)
+    suite_definition = workflow.process_suite(ewok_directory, sys.argv[1])
+    logger.info(f'suite {config.experiment} generated')
+    logger.info(f'the experiment files can be found in {config.experiment_root}')
+    logger.info(f'your experiment id is {config.experiment}')
+except Exception:
+    config.revert_experiment_id()
+    shutil.rmtree(config.experiment_root, True)
+    raise
+
+ewok_rc = os.path.join(os.environ['HOME'], '.ewok')
+os.makedirs(ewok_rc, exist_ok=True)
+with open(os.path.join(ewok_rc, 'exp.txt'), 'w') as f:
+    f.write(suite_definition)

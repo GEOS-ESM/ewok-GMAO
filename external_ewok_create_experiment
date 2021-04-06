@@ -1,0 +1,24 @@
+#!/bin/bash
+
+exp="$1"
+shift 1
+
+ecf_port=""
+while getopts ":p:" option; do
+  case $option in
+    p)
+    ecf_port="-p $OPTARG"
+    ;;
+    h)
+    echo "Usage: $0 experiment.yaml [-p port number]"
+    echo "       -h        print this help page"
+    echo "       -p <num>  specify server port number(ECF_PORT number)  - default chosen by ecflow"
+    exit 0
+    ;;
+  esac
+done
+
+set -eu
+
+./external_ew_create_experiment $exp
+ew_ecflow_suite_setup $ecf_port
