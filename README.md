@@ -23,7 +23,7 @@ Run copy_tasks.sh using the following command:
 ```./copy_tasks.sh```
 
 This copies all tasks from the tasks directory to the ewok environment directory that the suites link to. 
-**Note that you would have to run this task again whenever you rebuild ewok or whenever you create a new task.**
+**Note that you would have to run this script again whenever you rebuild ewok or whenever you create a new task.**
 
 To create an experiment, run the following command:
 
