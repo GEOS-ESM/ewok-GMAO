@@ -13,7 +13,7 @@ Set the environmental variable EWOK_ENV to your current ewok environment:
 Example:
 
 (Bash)
-```EWOK_ENV=/discover/nobackup/$USER/JediEwok/opt/ewok-env/```
+```export EWOK_ENV=/discover/nobackup/$USER/JediEwok/opt/ewok-env/```
 
 (Cshell)
 ```setenv EWOK_ENV /discover/nobackup/$USER/JediEwok/opt/ewok-env/```
