@@ -11,6 +11,6 @@ logger = Logger(os.environ['EWOK_TASK'])
 config = Configuration(sys.argv[1])
 print(config)
 
-logger.info(f'Hello World: {config.opening_remarks}')
+logger.info(f'Hello World: {config.opening_remarks}, {config.current_cycle}')
 time.sleep(90)
 

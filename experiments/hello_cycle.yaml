@@ -6,8 +6,8 @@ workflow_engine: ecflow
 
 # General suite definitions
 # -------------------------
-opening_remarks: "To be or not to be ..."
-closing_remarks: "...And lose the name of action"
+opening_remarks: "To be or not to be ... "
+closing_remarks: "...And lose the name of action "
 init_cycle: 2020-12-15T00:00:00Z
 last_cycle: 2020-12-15T12:00:00Z
 step_cycle: PT6H
